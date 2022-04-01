@@ -1,0 +1,4 @@
+npm init
+create server.js
+
+criar um servidor
