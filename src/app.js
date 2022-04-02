@@ -1,40 +1,14 @@
 import express from 'express';
+import db from './config/dbConnect.js';
+import livros from './models/Livro.js';
+
+db.on('error', console.error.bind(console, 'Erro ao conectar ao banco de dados:')); //verifica se houve erro na conexão com o banco de dados
+db.once('open', function() { //se não houver erro, executa a função
+    console.log('Conectado ao banco de dados');
+});
 
 const app = express();
 app.use(express.json());
-
-const livros = [
-    {
-        id: 1,
-        titulo: 'O Senhor dos Anéis',
-        preco: 20.00,
-        descricao: 'Livro de Aventura',
-        autor: {
-            id: 1,
-            nome: 'J.R.R. Tolkien'
-        }
-    },
-    {
-        id: 2,
-        titulo: 'As Crônicas de Gelo e Fogo',
-        preco: 25.00,
-        descricao: 'Livro de Fantasia',
-        autor: {
-            id: 2,
-            nome: 'George R. R. Martin'
-        }
-    },
-    {
-        id: 3,
-        titulo: 'Fundação',
-        preco: 30.00,
-        descricao: 'Livro de Ficção Científica',
-        autor: {
-            id: 3,
-            nome: 'Isaac Asimov'
-        }
-    },
-];
 
 //app.get é uma função do express que recebe dois parâmetros: o primeiro é a rota e o segundo é uma função que será executada quando a rota for acessada
 app.get('/', (req, res) => {
@@ -42,7 +16,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/livros', (req, res) => {
-    res.status(200).json(livros);
+    livros.find({}, (err, livros) => {
+        res.status(200).json(livros);
+    });
 });
 
 app.get('/livros/:id', (req, res) => {//busca um livro pelo id
