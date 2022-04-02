@@ -1,3 +1,5 @@
+//models é um diretório que contém os arquivos de modelo de dados.
+
 import mongoose from "mongoose";
 
 const livroSchema = new mongoose.Schema(

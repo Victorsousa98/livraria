@@ -1,6 +1,7 @@
 import express from 'express';
 import db from './config/dbConnect.js';
 import livros from './models/Livro.js';
+import routes from './routes/index.js';
 
 db.on('error', console.error.bind(console, 'Erro ao conectar ao banco de dados:')); //verifica se houve erro na conexão com o banco de dados
 db.once('open', function() { //se não houver erro, executa a função
@@ -8,28 +9,14 @@ db.once('open', function() { //se não houver erro, executa a função
 });
 
 const app = express();
+
 app.use(express.json());
 
-//app.get é uma função do express que recebe dois parâmetros: o primeiro é a rota e o segundo é uma função que será executada quando a rota for acessada
-app.get('/', (req, res) => {
-    res.status(200).send('Livraria');
-});
-
-app.get('/livros', (req, res) => {
-    livros.find({}, (err, livros) => {
-        res.status(200).json(livros);
-    });
-});
+routes(app);
 
 app.get('/livros/:id', (req, res) => {//busca um livro pelo id
     let index = livros.findIndex(livro => livro.id == req.params.id); //findIndex retorna o índice do livro que possui o id passado na rota
     res.json(livros[index]);
-});
-
-
-app.post('/livros', (req, res) => {//cadastra um livro. 
-    livros.push(req.body);
-    res.status(201).send('Livro cadastrado com sucesso');
 });
 
 //utilizamos put para atualizar um registro
