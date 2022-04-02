@@ -5,9 +5,10 @@ const router = express.Router(); //router é um objeto do express que permite cr
 
 router
     .get("/livros", livrosController.listarLivros)
+    .get("/livros/busca", livrosController.listarLivrosPorNome)
     .get("/livros/:id", livrosController.listarLivrosPorId)
     .post("/livros", livrosController.cadastrarLivro)
     .post("/livros/:id", livrosController.atualizarLivro)
     .delete("/livros/:id", livrosController.excluirLivro);
-    
+
 export default router;

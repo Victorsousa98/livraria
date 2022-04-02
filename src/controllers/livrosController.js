@@ -1,20 +1,20 @@
 import livros from "../models/Livro.js";
 
+
 class livrosController{
     static listarLivros(req, res){
-            livros.find({}, (err, livros) => {//find serve para buscar todos os registros de uma coleçã. o primeiro parâmetro é um objeto que contém os filtros e o segundo é uma função que será executada após a busca
-                if(err){
-                    res.status(500).send(err);
+            livros.find()
+                .populate("autor")
+                .exec((err, livros) => {
+                        res.json(livros);   
+                    });
                 }
-                else{
-                    res.json(livros);
-                }
-            });
-        }
     static listarLivrosPorId(req, res){
         const id = req.params.id;
 
-        livros.findById(id, (err, livro) => {
+        livros.findById(id)
+            .populate("autor", "nome")
+            .exec((err, livro) => {
             if(!err){
                 res.send(livro);
             }else{
@@ -55,6 +55,18 @@ class livrosController{
                 res.send("livro foi excluído com sucesso");
             }else{
                 res.status(500).send(err);
+            }
+        });
+    }
+
+    static listarLivrosPorNome = (req, res) => {
+        const nome = req.query.nome;
+                    //filtro                                            
+        livros.find({nome: nome}, {}, (err, livro) => {
+            if(!err){
+                res.send(livro);
+            }else{
+                res.status(400).send(err);
             }
         });
     }
