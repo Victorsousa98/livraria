@@ -1,4 +1,6 @@
-npm init
-create server.js
 
-criar um servidor
+nodemon
+express 
+
+abrir o server
+
